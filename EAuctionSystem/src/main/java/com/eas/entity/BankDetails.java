@@ -61,20 +61,16 @@ public class BankDetails implements Serializable {
 	@Column(name = "bank_details_id")
 	private int bankDetailsId;
 
-	@NotBlank(message = "Account Holder Name must not be empty")
 	@Column(name = "account_holder_name")
 	private String accountHolderName;
 
-	@NotBlank(message = "Account number must not be empty")
 	@Pattern(regexp = "[0-9]{14}", message = "Account number must have 14 digits")
 	@Column(name = "account_number")
 	private String accountNumber;
 
-	@NotBlank(message = "Bank name must not be empty")
 	@Column(name = "bank_name")
 	private String bankName;
 
-	@NotBlank(message = "Branch name must not be empty")
 	@Column(name = "branch_name")
 	private String branchName;
 	

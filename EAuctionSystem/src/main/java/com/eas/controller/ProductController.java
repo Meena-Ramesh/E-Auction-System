@@ -3,14 +3,9 @@ package com.eas.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.eas.entity.Product;
 import com.eas.entity.ReviewStatus;
 import com.eas.entity.User;
 import com.eas.entity.UserType;
-import com.eas.exception.DetectErrors;
 import com.eas.exception.InvalidInputDataException;
 import com.eas.service.ProductService;
 import com.eas.service.UserService;
@@ -39,39 +34,36 @@ public class ProductController {
 		UserService userService;
 
 		@PostMapping("/{userId}")
-		public ResponseEntity<Product> addProduct(@PathVariable int userId,@Valid @RequestBody Product product, Errors errors) {
-			
-			DetectErrors.detectErrors(errors);
-			
-			
+		public ResponseEntity<Product> addProduct(@PathVariable int userId,@RequestBody Product product) {
 			User productSeller = userService.findUserById(userId).orElseThrow(() -> new InvalidInputDataException("Sorry! The seller doesn't exist!"));
+			
 			if(productSeller.getUserType()!=UserType.SELLER && productSeller.getUserType()!=UserType.BOTH) {
 				throw new InvalidInputDataException("Sorry! You don't have access to add a product!");
 			}
+			
 			product.setSeller(productSeller);
 			product.setReviewStatus(ReviewStatus.PENDING);
+			
 			return new ResponseEntity<Product>(productService.addProduct(product), HttpStatus.CREATED);
-
 		}
 		
 		@GetMapping("/{id}")
 		public ResponseEntity<Product> getProductById(@PathVariable("id") int productId){
 			Product product = productService.getProductById(productId).orElseThrow(() -> new InvalidInputDataException("Sorry! No Products Found with the given ID " + productId));
 			return new ResponseEntity<Product>(product, HttpStatus.OK);
-			
 		}
 		
 		@PutMapping("")
-		public ResponseEntity<Product> updateProduct(@Valid	@RequestBody Product product, Errors errors) throws InvalidInputDataException {
-			
-			DetectErrors.detectErrors(errors);
+		public ResponseEntity<Product> updateProduct(@RequestBody Product product) throws InvalidInputDataException {
 	        Product productToBeUpdated = productService.getProductById(product.getProductId()).orElseThrow(
 					() -> new InvalidInputDataException("Sorry! No Products Found with the given ID " + product.getProductId()));
+	        
 			productToBeUpdated.setProductName(product.getProductName());
 			productToBeUpdated.setProductDescription(product.getProductDescription());
+			
 			Product updatedProduct = productService.updateProduct(productToBeUpdated);
+			
 			return new ResponseEntity<Product>(updatedProduct, HttpStatus.ACCEPTED);
-
 		}
 		
 		@DeleteMapping("/{id}")
@@ -83,7 +75,7 @@ public class ProductController {
 		}
 		
 		@GetMapping("/seller/{id}")
-		public ResponseEntity<List<Product>> getProductsOwnedByUser( @PathVariable("id") int userId){
+		public ResponseEntity<List<Product>> getProductsOwnedByUser(@PathVariable("id") int userId){
 			User productSeller = userService.findUserById(userId).orElseThrow(() -> new InvalidInputDataException("Sorry! The seller doesn't exist!"));
 			
 			List<Product> productList = new ArrayList<>();

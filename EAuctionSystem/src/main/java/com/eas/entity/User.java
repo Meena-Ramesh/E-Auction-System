@@ -77,42 +77,28 @@ public class User implements Serializable {
 	@Column(name = "user_id")
 	private int userId;
 
-	@NotBlank(message = "First name should not be empty")
-	@Size(min = 3, max = 20, message = "First name should be between 3 and 20 characters")
 	@Column(name = "first_name")
 	private String firstName;
 
 	@Column(name = "last_name")
 	private String lastName;
 	
-	@NotNull(message = "Email cannot be null") 
-	@Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$" , message = "Email is invalid")
 	private String email;
 
-	@NotNull(message = "Aadhar number cannot be null") 
-	@Pattern(regexp = "[0-9]{12}" , message = "Aadhar number should have 12 numbers")
 	@Column(name = "aadhar_number")
 	private String aadharNumber;
 
-	@NotNull(message = "Contact number cannot be null") 
-	@Pattern(regexp = "[0-9]{10}" , message = "Contact number should have 10 digits")
 	@Column(name = "contact_number")
 	private String contactNumber;
 
-	@Valid
-	@NotNull(message = "Address cannot be null")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
 	private Address address;
 
-	@Valid
-	@NotNull(message = "Bank Details cannot be null")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bank_details_id")
 	private BankDetails bankDetails;
 
-	@NotBlank(message = "Password cannot be null") 
-	@Size(min = 5, message = "Password must have minimum 5 characters")
 	@Column(name = "password")
 	private String password;
 

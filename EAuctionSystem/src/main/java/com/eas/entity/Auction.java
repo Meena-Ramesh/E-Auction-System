@@ -61,25 +61,18 @@ public class Auction implements Serializable {
 	@Column(name = "auction_id")
 	private int auctionId;
 
-	@NotNull(message = "Product base price should not be empty")
 	@Column(name = "base_price")
 	private double basePrice;
-	
 	
 	@Column(name = "max_bid_price")
 	private double maxBidPrice;
 	
-	
-	@NotNull(message = "Auction start date should not be empty")
 	@Column(name = "start_date")
 	private Date startDate;
 	
-	
-	@NotNull(message = "Auction end date should not be empty")
 	@Column(name = "end_date")
 	private Date endDate;
 
-	@Valid
 	@Column(name = "bid_winner")
 	private User bidWinner;
 

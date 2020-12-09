@@ -75,34 +75,27 @@ public class Address implements Serializable {
 	@Column(name = "address_id")
 	private int addressId;
 
-	@NotBlank(message = "Door number cannot be empty")
 	@Column(name = "door_number")
 	private String doorNumber;
 
 	@Column(name = "building_name")
 	private String buildingName;
 
-	@NotBlank(message = "Street name cannot be empty")
 	@Column(name = "street_name")
 	private String streetName;
 
-	@NotBlank(message = "Locality cannot be empty")
 	@Column
 	private String locality;
 
-	@NotBlank(message = "City cannot be empty")
 	@Column
 	private String city;
 
-	@NotBlank(message = "State cannot be empty")
 	@Column
 	private String state;
 
-	@NotBlank(message = "Country cannot be empty")
 	@Column
 	private String country;
 
-	@NotNull(message = "Zip cannot be empty")
 	@Column
 	private int zip;
 	

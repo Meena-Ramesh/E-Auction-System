@@ -15,7 +15,12 @@ import javax.validation.constraints.NotNull;
 @Table(name = "product")
 public class Product implements Serializable {
 	
-/*
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
  * Default constructor	
  */
 	public Product() {
@@ -62,31 +67,22 @@ public class Product implements Serializable {
 	@Column(name = "product_id")
 	private int productId;
 	
-	@NotBlank(message = "Product name should not be empty")
 	@Column(name = "product_name")
 	private String productName;
 	
-	@NotBlank(message = "Product category should not be empty")
 	private String category;
 	
-	
-	
-	@Valid
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "seller_id")
 	private User seller;
 	
-	@NotBlank(message = "Product Description should not be empty")
 	@Column(name = "product_description")
 	private String productDescription;
-	
-	
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "review_status")
 	private ReviewStatus reviewStatus;
 	
-	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "auction_id", nullable = true)
 	private Auction auction;
