@@ -76,7 +76,6 @@ public class ProductServiceJpaImpl implements ProductService {
 
 	@Override
 	public Product getProductByAuction(Auction auction) {
-
 		return productRepository.findByAuction(auction);
 	}
 

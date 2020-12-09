@@ -3,11 +3,11 @@ package com.eas.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author madhu
@@ -17,7 +17,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name = "auction")
 public class Auction implements Serializable {
 	
-/*
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/*
  * Default constructor	
  */
 	public Auction() {

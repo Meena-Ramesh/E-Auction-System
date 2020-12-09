@@ -19,10 +19,8 @@ import javax.persistence.Table;
 @Table(name = "bid")
 public class Bid implements Serializable{
 	
-/*
- * Default constructor
- */
-	
+	private static final long serialVersionUID = 1L;
+
 	public Bid() {
 
 	}

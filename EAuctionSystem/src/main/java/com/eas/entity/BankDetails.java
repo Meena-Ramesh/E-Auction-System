@@ -2,10 +2,12 @@ package com.eas.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.NotBlank;
 
 
 /**
