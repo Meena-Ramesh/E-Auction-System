@@ -13,4 +13,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 }
 
-//SELECT e.name, CASE WHEN (e.salary >= 100000) THEN 1 WHEN (e.salary < 100000) THEN 2 ELSE 0 END FROM Employee e
+
