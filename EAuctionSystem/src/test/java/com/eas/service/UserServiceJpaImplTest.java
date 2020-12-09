@@ -1,6 +1,8 @@
 package com.eas.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +58,10 @@ public class UserServiceJpaImplTest {
 	user.setContactNumber("1234567872");
 	user.setAddress(address);
 	user.setBankDetails(bankDetails);
+	
+	Mockito.when(userRepository.save(user)).thenReturn(user);
+	assertThat(userService.createAccount(user)).isEqualTo(user);
 
-	Mockito.when(userService.createAccount(user)).thenReturn(user);
-	assertThat(user).isEqualTo(user);
 	}
 
 	@Test
@@ -88,7 +91,6 @@ public class UserServiceJpaImplTest {
 	user.setAddress(address);
 	user.setBankDetails(bankDetails);
 	user.setUserId(12);
-	
 	assertThat(userService.findUserById(12)).isEqualTo(userRepository.findById(12));
 	
 	}
@@ -121,8 +123,8 @@ public class UserServiceJpaImplTest {
 	user.setAddress(address);
 	user.setBankDetails(bankDetails);
 	user.setUserId(12);
-	Mockito.when(userService.validateUser(user.getUserId(), user.getPassword())).thenReturn(true);
-	assertThat(userService.validateUser(user.getUserId(), user.getPassword())).isEqualTo(true);
+	Mockito.when(userRepository.validateUser(user.getUserId(), user.getPassword())).thenReturn(true);
+	assertTrue(userService.validateUser(12, "california"));
 	}
 
 	 
