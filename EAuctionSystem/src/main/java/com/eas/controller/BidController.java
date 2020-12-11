@@ -80,6 +80,7 @@ public class BidController {
 		User buyer = userService.findUserById(userId).orElseThrow(()-> new InvalidInputDataException("Invalid user id"));
 		Auction auction = auctionService.getAuctionById(auctionId);
 		bidService.removeAllBid(auction, buyer);
+		auctionService.calculateMaxBidPrice(productService.getProductByAuction(auction).getProductId());
 		return new ResponseEntity<String>("Bids deleted successfully", HttpStatus.OK);
 	}
 

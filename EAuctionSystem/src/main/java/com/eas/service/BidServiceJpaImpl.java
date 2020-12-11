@@ -9,14 +9,23 @@ import com.eas.entity.Auction;
 import com.eas.entity.Bid;
 import com.eas.entity.User;
 import com.eas.exception.BidNotFoundException;
+import com.eas.repository.AuctionRepository;
 import com.eas.repository.BidRepository;
+import com.eas.repository.ProductRepository;
+
+import ch.qos.logback.classic.spi.PackagingDataCalculator;
 
 @Service
 public class BidServiceJpaImpl implements BidService {
 
 	@Autowired
 	private BidRepository bidRepository;
-
+	
+	@Autowired
+	private AuctionRepository auctionRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	@Override
 	public List<Bid> getBidsByAuction(Auction auction) {
 		return bidRepository.findByAuction(auction);
@@ -29,8 +38,8 @@ public class BidServiceJpaImpl implements BidService {
 		if (bidList.isEmpty()) {
 			throw new BidNotFoundException("You haven't made any bids for this auction yet");
 		}
-
-		bidRepository.deleteAll(bidList);
+		else
+		  bidRepository.deleteAll(bidList);
 
 	}
 

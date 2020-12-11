@@ -3,10 +3,13 @@ package com.eas.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -40,7 +43,7 @@ public class Auction implements Serializable {
  * @param auctionStatus the status of the auction.If the auction is over, it returns completed
  */
 	
-	public Auction(int auctionId,double basePrice, double maxBidPrice, Date startDate, Date endDate, User bidWinner) {
+	public Auction(int auctionId,double basePrice, double maxBidPrice, Date startDate, Date endDate, int bidWinner) {
 		super();
 		this.auctionId = auctionId;
 		this.basePrice = basePrice;
@@ -55,7 +58,7 @@ public class Auction implements Serializable {
  * @param product the product entity
  */
 	
-	public Auction( Date startDate, Date endDate, AuctionStatus auctionStatus) {
+	public Auction( Date startDate, Date endDate) {
 		super();
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -78,9 +81,9 @@ public class Auction implements Serializable {
 	
 	@Column(name = "end_date")
 	private Date endDate;
-
+	
 	@Column(name = "bid_winner")
-	private User bidWinner;
+	private int bidWinner;
 
 
 /*
@@ -129,13 +132,60 @@ public class Auction implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public User getBidWinner() {
+	public int getBidWinner() {
 		return bidWinner;
 	}
 
-	public void setBidWinner(User bidWinner) {
+	public void setBidWinner(int bidWinner) {
 		this.bidWinner = bidWinner;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + auctionId;
+		long temp;
+		temp = Double.doubleToLongBits(basePrice);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + bidWinner;
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		temp = Double.doubleToLongBits(maxBidPrice);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Auction other = (Auction) obj;
+		if (auctionId != other.auctionId)
+			return false;
+		if (Double.doubleToLongBits(basePrice) != Double.doubleToLongBits(other.basePrice))
+			return false;
+		if (bidWinner != other.bidWinner)
+			return false;
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (!endDate.equals(other.endDate))
+			return false;
+		if (Double.doubleToLongBits(maxBidPrice) != Double.doubleToLongBits(other.maxBidPrice))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		return true;
+	}
+
 	
 	
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eas.entity.User;
+import com.eas.entity.UserLogin;
 import com.eas.exception.InvalidInputDataException;
 import com.eas.service.UserService;
 
@@ -32,9 +33,9 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}/{password}")
-	public ResponseEntity<String> validateUser(@PathVariable("id") int userId, @PathVariable("password") String password) {
-		boolean status = userService.validateUser(userId, password);
+	@GetMapping("/login")
+	public ResponseEntity<String> validateUser(@RequestBody UserLogin userLogin) {
+		boolean status = userService.validateUser(userLogin.getUserId(), userLogin.getPassword());
 		if(status) 
 			return new ResponseEntity<>("Logged in successfully", HttpStatus.OK);
 		else

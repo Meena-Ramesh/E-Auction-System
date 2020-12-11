@@ -83,7 +83,7 @@ public class AuctionServiceJpaImplTest {
         Date start = sdf.parse(startDate);
         Date end = sdf.parse(endDate);
 		auction.setAuctionId(10);
-		auction.setBidWinner(null);
+		auction.setBidWinner(0);
 		auction.setMaxBidPrice(0.0);
 		auction.setBasePrice(10.0);
 		auction.setStartDate(start);

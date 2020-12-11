@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eas.entity.User;
+import com.eas.exception.InvalidInputDataException;
 import com.eas.repository.UserRepository;
 
 @Service
@@ -16,7 +17,10 @@ public class UserServiceJpaImpl implements UserService{
 
 	@Override
 	public boolean validateUser(int userId, String password) {
-		return userRepository.validateUser(userId, password);
+		User user = userRepository.findById(userId).orElseThrow(() -> new InvalidInputDataException("User doesn't exist"));
+		if(user.getPassword().equals(password))
+			return true;
+		return false;
 	}
 
 	@Override

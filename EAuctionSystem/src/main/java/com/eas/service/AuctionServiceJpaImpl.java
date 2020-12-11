@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.eas.entity.Auction;
 import com.eas.entity.Bid;
 import com.eas.entity.Product;
-import com.eas.exception.BidNotFoundException;
 import com.eas.exception.InvalidInputDataException;
 import com.eas.repository.AuctionRepository;
 import com.eas.repository.BidRepository;
@@ -37,9 +36,12 @@ public class AuctionServiceJpaImpl implements AuctionService {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new InvalidInputDataException("Invalid product id"));
 		Auction productAuction = product.getAuction();
+		if(productAuction == null) {
+			throw new InvalidInputDataException("There is no auction for the product yet");
+		}
 		List<Bid> bidList = bidRepository.findByAuction(productAuction);
 		if (bidList.isEmpty()) {
-			throw new BidNotFoundException("There is no bids made for this product yet!");
+			return productAuction.getBasePrice();
 		}
 
 		Bid highestBid = bidList.stream().max((bid1, bid2) -> Double.compare(bid1.getBidPrice(), bid2.getBidPrice()))
@@ -48,7 +50,7 @@ public class AuctionServiceJpaImpl implements AuctionService {
 
 		Auction auctionToBeUpdated = auctionRepository.findById(auction.getAuctionId()).orElse(null);
 		auctionToBeUpdated.setMaxBidPrice(highestBid.getBidPrice());
-		auctionToBeUpdated.setBidWinner(highestBid.getBuyer());
+		auctionToBeUpdated.setBidWinner(highestBid.getBuyer().getUserId());
 		auctionRepository.save(auctionToBeUpdated);
 
 		return highestBid.getBidPrice();

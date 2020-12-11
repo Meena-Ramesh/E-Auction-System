@@ -8,8 +8,6 @@ import com.eas.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
-	@Query("SELECT CASE WHEN (user.userId = :Id AND user.password = :pwd) THEN true ELSE false END FROM User user")
-	boolean validateUser(@Param("Id") int userId,@Param("pwd") String password);
 
 }
 
