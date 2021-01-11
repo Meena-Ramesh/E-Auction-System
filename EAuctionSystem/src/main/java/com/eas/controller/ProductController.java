@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.eas.exception.InvalidInputDataException;
 import com.eas.service.ProductService;
 import com.eas.service.UserService;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("eas/product")
 public class ProductController {	
@@ -33,18 +35,18 @@ public class ProductController {
 		@Autowired
 		UserService userService;
 
-		@PostMapping("/{userId}")
-		public ResponseEntity<Product> addProduct(@PathVariable int userId,@RequestBody Product product) {
-			User productSeller = userService.findUserById(userId).orElseThrow(() -> new InvalidInputDataException("Sorry! The seller doesn't exist!"));
-			
-			if(productSeller.getUserType()!=UserType.SELLER && productSeller.getUserType()!=UserType.BOTH) {
-				throw new InvalidInputDataException("Sorry! You don't have access to add a product!");
-			}
-			
+		@PostMapping("")
+		public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+			User productSeller = userService.findUserById(product.getSeller().getUserId()).orElseThrow(() -> new InvalidInputDataException("Sorry! The seller doesn't exist!"));
 			product.setSeller(productSeller);
 			product.setReviewStatus(ReviewStatus.PENDING);
 			
 			return new ResponseEntity<Product>(productService.addProduct(product), HttpStatus.CREATED);
+		}
+		
+		@GetMapping("")
+		public ResponseEntity<List<Product>> getAllApprovedProducts(){
+			return new ResponseEntity<List<Product>>(productService.getAllApprovedProducts(), HttpStatus.OK );
 		}
 		
 		@GetMapping("/{id}")
@@ -59,6 +61,7 @@ public class ProductController {
 					() -> new InvalidInputDataException("Sorry! No Products Found with the given ID " + product.getProductId()));
 	        
 			productToBeUpdated.setProductName(product.getProductName());
+			productToBeUpdated.setCategory(product.getCategory());
 			productToBeUpdated.setProductDescription(product.getProductDescription());
 			
 			Product updatedProduct = productService.updateProduct(productToBeUpdated);
@@ -67,10 +70,12 @@ public class ProductController {
 		}
 		
 		@DeleteMapping("/{id}")
-		public String deleteProduct(@PathVariable("id") int productId) {
+		public ResponseEntity<String> deleteProduct(@PathVariable("id") int productId) {
 			Product productToBeDeleted = productService.getProductById(productId).orElseThrow(()-> new InvalidInputDataException("Sorry! No Products Found with the given ID "+productId));
+			if(productToBeDeleted.getAuction() != null) 
+				throw new InvalidInputDataException("Sorry!! Cannot delete a product which is already in auction");
 			productService.deleteProduct(productToBeDeleted);		
-			return "Product Deleted";
+			return new ResponseEntity<String>("Deleted", HttpStatus.OK);
 			
 		}
 		
@@ -95,7 +100,7 @@ public class ProductController {
 				return new ResponseEntity<String>("The given user is the seller of this product", HttpStatus.OK);
 			}
 			else {
-				return new ResponseEntity<String>("The given user is not the seller of this product", HttpStatus.OK);
+				return new ResponseEntity<String>("The given user is not the seller of this product", HttpStatus.BAD_REQUEST);
 			}
 		}
 		
@@ -127,9 +132,9 @@ public class ProductController {
 		public ResponseEntity<Product> reviewProduct(@PathVariable int productId,@PathVariable String status){
 			Product productToBeReviewed = productService.getProductById(productId).orElseThrow(()-> new InvalidInputDataException("Sorry! No Products Found with the given ID "+productId));
 			 ReviewStatus reviewStatus;
-			 if(status.equals("approved"))
+			 if(status.equals("approve"))
 				 reviewStatus = ReviewStatus.APPROVED;
-			 else if(status.equals("rejected"))
+			 else if(status.equals("reject"))
 				 reviewStatus = ReviewStatus.REJECTED;
 			 else
 				 throw new InvalidInputDataException("Invalid Review Status");

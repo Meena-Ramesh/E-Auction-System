@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.eas.entity.Auction;
 import com.eas.entity.Product;
 import com.eas.entity.ReviewStatus;
 import com.eas.entity.User;
+import com.eas.exception.InvalidInputDataException;
 import com.eas.repository.ProductRepository;
 
 @Service
@@ -77,6 +79,16 @@ public class ProductServiceJpaImpl implements ProductService {
 	@Override
 	public Product getProductByAuction(Auction auction) {
 		return productRepository.findByAuction(auction);
+	}
+
+	@Override
+	public List<Product> getAllApprovedProducts() {
+		List<Product> productList = productRepository.getAllApprovedProducts();
+		if(productList.isEmpty()) {
+			throw new InvalidInputDataException("No approved products to be displayed yet");
+		}
+		return productList;
+		
 	}
 
 }

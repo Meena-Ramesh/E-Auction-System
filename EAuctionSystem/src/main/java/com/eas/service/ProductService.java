@@ -3,6 +3,8 @@ package com.eas.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.eas.entity.Auction;
 import com.eas.entity.Product;
 import com.eas.entity.ReviewStatus;
@@ -30,4 +32,6 @@ public interface ProductService {
 	Product reviewProduct(Product product, ReviewStatus reviewStatus);
 
 	Product getProductByAuction(Auction auction);
+
+	List<Product> getAllApprovedProducts();
 }

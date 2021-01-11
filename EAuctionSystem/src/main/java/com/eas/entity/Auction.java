@@ -145,14 +145,6 @@ public class Auction implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + auctionId;
-		long temp;
-		temp = Double.doubleToLongBits(basePrice);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + bidWinner;
-		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-		temp = Double.doubleToLongBits(maxBidPrice);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		return result;
 	}
 
@@ -167,24 +159,10 @@ public class Auction implements Serializable {
 		Auction other = (Auction) obj;
 		if (auctionId != other.auctionId)
 			return false;
-		if (Double.doubleToLongBits(basePrice) != Double.doubleToLongBits(other.basePrice))
-			return false;
-		if (bidWinner != other.bidWinner)
-			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
-				return false;
-		} else if (!endDate.equals(other.endDate))
-			return false;
-		if (Double.doubleToLongBits(maxBidPrice) != Double.doubleToLongBits(other.maxBidPrice))
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
 		return true;
 	}
+
+	
 
 	
 	

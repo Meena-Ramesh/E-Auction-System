@@ -23,4 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	Product findByAuction(Auction auction);
 
+	@Query("Select product FROM Product product WHERE product.reviewStatus = 'APPROVED'")
+	List<Product> getAllApprovedProducts();
+
 }

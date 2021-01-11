@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 		ErrorMessage errorMessage = new ErrorMessage();
 		errorMessage.setErrorCode(HttpStatus.BAD_REQUEST.value());
 		errorMessage.setErrorMessage(exception.getMessage());
-		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.OK);
+		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(BidNotFoundException.class)
@@ -23,7 +23,15 @@ public class GlobalExceptionHandler {
 		ErrorMessage errorMessage = new ErrorMessage();
 		errorMessage.setErrorCode(HttpStatus.BAD_REQUEST.value());
 		errorMessage.setErrorMessage(exception.getMessage());
-		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.OK);
+		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorMessage> handleAllException(Exception exception){
+		ErrorMessage errorMessage = new ErrorMessage();
+		errorMessage.setErrorCode(HttpStatus.BAD_REQUEST.value());
+		errorMessage.setErrorMessage(exception.getMessage());
+		return new ResponseEntity<ErrorMessage>(errorMessage, HttpStatus.BAD_REQUEST);
 	}
 	
 }

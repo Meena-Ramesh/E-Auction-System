@@ -1,5 +1,6 @@
 package com.eas.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class UserServiceJpaImpl implements UserService{
 	@Override
 	public User createAccount(User newUser) {
 		return userRepository.save(newUser);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		return userRepository.findAll();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.eas.service.BidService;
 import com.eas.service.ProductService;
 import com.eas.service.UserService;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("eas/bid")
 public class BidController {
@@ -41,8 +43,8 @@ public class BidController {
 	@Autowired
 	ProductService productService;
 
-	@PostMapping("/{userId}")
-	public ResponseEntity<Bid> createBid(@PathVariable int userId, @RequestBody Bid bid) {
+	@PostMapping("")
+	public ResponseEntity<Bid> createBid(@RequestBody Bid bid) {
 		Auction auction = auctionService.getAuctionById(bid.getAuction().getAuctionId());
 		bid.setAuction(auction);
 		if (auction == null)
@@ -55,7 +57,7 @@ public class BidController {
 		if (bid.getBidPrice() < bid.getAuction().getBasePrice()) {
 			throw new InvalidInputDataException("The bidding price must be greater than the base price");
 		}
-		User bidder = userService.findUserById(userId)
+		User bidder = userService.findUserById(bid.getBuyer().getUserId())
 				.orElseThrow(() -> new InvalidInputDataException("The user doesn't exist"));
 		if (bidder.getUserType() != UserType.BUYER && bidder.getUserType() != UserType.BOTH)
 			throw new InvalidInputDataException("You don't have access to bid on this product");

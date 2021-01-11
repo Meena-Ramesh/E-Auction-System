@@ -64,4 +64,13 @@ public class AuctionServiceJpaImpl implements AuctionService {
 				.orElseThrow(() -> new InvalidInputDataException("Auction id is invalid"));
 	}
 
+	@Override
+	public List<Auction> getAllAuctions() {
+		List<Auction> auctionList = auctionRepository.findAll();
+		if(auctionList.isEmpty()) 
+			throw new InvalidInputDataException("No auction to be displayed");
+		else
+			return auctionList;
+	}
+
 }

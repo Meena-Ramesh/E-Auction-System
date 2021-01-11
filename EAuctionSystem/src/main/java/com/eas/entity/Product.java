@@ -45,7 +45,7 @@ public class Product implements Serializable {
  * @param auction the auction entity
  */
 	public Product(int productId, String productName, String category, double basePrice, User seller,
-			String productDescription, boolean availabilityStatus, ReviewStatus reviewStatus, Auction auction) {
+			String productDescription, boolean availabilityStatus, ReviewStatus reviewStatus, Auction auction, String productImage) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
@@ -54,16 +54,17 @@ public class Product implements Serializable {
 		this.productDescription = productDescription;
 		this.reviewStatus = reviewStatus;
 		this.auction = auction;
+		this.productImage = productImage;
 	}
 
 /*
  * Overloaded constructor	
  */
-	public Product(String productName, String category, User seller, String productDescription) {
+	public Product(String productName, String category, User seller, String productDescription, String productImage) {
 		super();
 		this.productName = productName;
 		this.category = category;
-		
+		this.productImage = productImage;
 		this.seller = seller;
 		this.productDescription = productDescription;
 	}
@@ -92,6 +93,9 @@ public class Product implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "auction_id", nullable = true)
 	private Auction auction;
+	
+	@Column(name = "product_image")
+	private String productImage;
 
 /*
  * Getters and Setters	
@@ -152,6 +156,14 @@ public class Product implements Serializable {
 
 	public void setAuction(Auction auction) {
 		this.auction = auction;
+	}
+
+	public String getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(String productImage) {
+		this.productImage = productImage;
 	}
 
 	@Override

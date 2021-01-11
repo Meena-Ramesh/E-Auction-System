@@ -1,8 +1,11 @@
 package com.eas.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import com.eas.service.BidService;
 import com.eas.service.ProductService;
 import com.eas.service.UserService;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("eas/auction")
 public class AuctionController {
@@ -60,6 +64,11 @@ public class AuctionController {
 	@GetMapping("/{auctionId}")
 	public ResponseEntity<Auction> getAuctionById(@PathVariable int auctionId){
 		return new ResponseEntity<Auction>(auctionService.getAuctionById(auctionId), HttpStatus.OK);
+	}
+	
+	@GetMapping("")
+	public ResponseEntity<List<Auction>> getAllAuctions(){
+		return new ResponseEntity<List<Auction>>(auctionService.getAllAuctions(), HttpStatus.OK);
 	}
 	
 	
